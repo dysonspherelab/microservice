@@ -9,18 +9,18 @@ FIXTURE_MICROSERVICE="./${SERVICES_DIR}/fixture-microservice"
 GROUPS_TEAMS_MICROSERVICE="./${SERVICES_DIR}/groups-teams-microservice"
 
 install_deps()
-{
+{   
+
     if [ ! -d "${EMPLOYEE_MICROSERVICE}/node_modules" ]; then
-        cd "${EMPLOYEE_MICROSERVICE}" && npm install
-        
+        cd "${EMPLOYEE_MICROSERVICE}" && npm install ; cd -
     fi
 
     if [ ! -d "${FIXTURE_MICROSERVICE}/node_modules" ]; then
-        cd "${FIXTURE_MICROSERVICE}" && npm install
+        cd "${FIXTURE_MICROSERVICE}" && npm install ; cd -
     fi
 
     if [ ! -d "${GROUPS_TEAMS_MICROSERVICE}/node_modules" ]; then
-        cd "${GROUPS_TEAMS_MICROSERVICE}" && npm install
+        cd "${GROUPS_TEAMS_MICROSERVICE}" && npm install ; cd -
     fi
 }
 
