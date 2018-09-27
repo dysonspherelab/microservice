@@ -1,4 +1,5 @@
-package numpackage;
+package Numpackage;
+
 syntax = "proto3";
  
 message NumMessage {
