@@ -1,13 +1,6 @@
 const TYPES = {
-
-
-    EmployeeService: Symbol('EmployeeService'),
-    EmployeeNoSQLRepository: Symbol('EmployeeNoSQLRepository'),
-
-    ToJsonService: Symbol('ToJsonService'),
-
-
-
+    EmployeeRepository: Symbol("EmployeeRepository"),
+    EmployeeService: Symbol("EmployeeService")
 };
 
 export default TYPES;

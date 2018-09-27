@@ -1,4 +1,17 @@
-export class Employee {
+
+export interface IEmployee{
+    getEntitity: string
+    GetEmpId: string
+    GetClient_id: string
+    GetEmpName: string
+    GetDept: string
+    GetTeam: string
+    GetManager: string
+    GetCapital: string
+    getId: string
+}
+
+export class Employee implements IEmployee {
 
     constructor(
         private entitity?: string,
