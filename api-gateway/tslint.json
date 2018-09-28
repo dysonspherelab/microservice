@@ -22,7 +22,7 @@
         "interface-name": [true, "never-prefix"],
         "interface-over-type-literal": true,
         "jsdoc-format": true,
-        "linebreak-style": [true, "CRLF"],
+        "linebreak-style": [true, "LF"],
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-null-keyword": true,
