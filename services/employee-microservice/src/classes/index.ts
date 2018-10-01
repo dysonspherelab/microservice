@@ -2,104 +2,117 @@ import { injectable, inject } from "inversify";
 import { Core, Model } from "iridium";
 import * as Bluebird from "bluebird";
 
-import { EmployeeService, EmployeeRepository, EmployeeDTO, InterfaceEmployee } from "../interfaces";
+import { IEmployeeService, EmployeeRepository, IEmployee, EmployeeDO } from "../interfaces";
 import { EmployeeMongoSchema } from "../schema";
 import TYPES from "../types/types";
 import CONFIG from "../config";
 
-class Employee implements InterfaceEmployee {
 
-    constructor(
-        private entitity: string,
-        private empId: string,
-        private clientId: string,
-        private empName: string,
-        private dept: string,
-        private team: string,
-        private manager: string,
-        private capital: string,
-        private _id: string,
-    ) { }
-    get getEntitity(): string {
-        return this.entitity;
-    }
 
-    get GetEmpId(): string {
-        return this.empId;
-    }
-
-    get GetClient_id(): string {
-        return this.clientId;
-    }
-
-    get GetEmpName(): string {
-        return this.empName;
-    }
-
-    get GetDept(): string {
-        return this.dept;
-    }
-
-    get GetTeam(): string {
-        return this.team;
-    }
-
-    get GetManager(): string {
-        return this.manager;
-    }
-
-    get GetCapital(): string {
-        return this.capital;
-    }
-
-    get getId(): string {
-        return this._id;
-    }
-}
-
-class EmployeeDatabase extends Core {
-    public model = new Model<EmployeeDTO, EmployeeMongoSchema>(this, EmployeeMongoSchema);
-
-}
-
-const employeesMongoDatabase = new EmployeeDatabase(CONFIG.mongo());
-
-/**
- * Iridium implementation on Employee API
- * @export
- * @class EmployeeRepositoryMongo
- * @implements {EmployeeRepository}
- */
 
 @injectable()
-export class EmployeeRepositoryMongo implements EmployeeRepository {
-
-
-    public async findAll(): Promise<EmployeeDTO[]> {
-        const employeeDTOs = await employeesMongoDatabase.connect().then(() => employeesMongoDatabase.model.find());
-        return employeeDTOs.toArray();
+export class Employee implements EmployeeDO {
+    private _entitity!: string;
+    private _empId!: string;
+    private _clientId!: string;
+    private _empName!: string;
+    private _dept!: string;
+    private _team!: string;
+    private _manager!: string;
+    private _capital!: string;
+    private _id!: string;
+    private _employee: IEmployee;
+    @inject(TYPES.IEmployeeService) private _employeeService!: IEmployeeService;
+    constructor(employeeData: IEmployee) {
+        this._employee = this._setEmployee(employeeData);
     }
 
-    /**
-     * Create new mongo document for Employee
-     * @param {EmployeeDTO} employeeData
-     * @returns {Promise<EmployeeDTO>}
-     * @memberof EmployeeRepositoryMongo
-     */
-    public createEmployee(employeeData: EmployeeDTO) {
-        return employeesMongoDatabase
-            .connect()
-            .then(() => employeesMongoDatabase.model.insert(employeeData));
-
+    private _getEntitity(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._entitity;
     }
 
-    public deleteEmployee(id: string | number) {
-        return employeesMongoDatabase
-            .connect()
-            .then(() => employeesMongoDatabase.model.remove({ _id: id }));
+    private _getEmpId(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._empId || "0";
     }
 
+    private _getClient_id(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._clientId || "0";
+    }
+
+    private _getEmpName(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._empName || "";
+    }
+
+    private _getDept(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._dept || "";
+    }
+
+    private _getTeam(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._team || "";
+    }
+
+    private _getManager(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._manager || "";
+    }
+
+    private _getCapital(object: IEmployee): string {
+        this._entitity = object.entitity || "";
+        return this._capital || "";
+    }
+
+    private _getId(object: IEmployee): string | number {
+        this._entitity = object.entitity || "";
+        return this._id || 0;
+    }
+
+    private _setEmployee(object: IEmployee) {
+        return {
+            entitity: this._getEntitity(object),
+            empId: this._getEmpId(object),
+            clientId: this._getClient_id(object),
+            empName: this._getEmpName(object),
+            dept: this._getDept(object),
+            team: this._getTeam(object),
+            manager: this._getManager(object),
+            capital: this._getCapital(object),
+            _id: this._getId(object),
+        };
+    }
+
+    public getEmployee() {
+        return this._employee;
+    }
+
+    public addEmployee() {
+        return this._employeeService.createEmployee(this._employee);
+    }
+
+    public listEmployees() {
+        return this._employeeService.getEmployees();
+    }
+
+    public removeEmployee(id: number) {
+        return this._employeeService.deleteEmployee(id);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * EmployeeService interface implementation
@@ -108,7 +121,7 @@ export class EmployeeRepositoryMongo implements EmployeeRepository {
  * @implements {EmployeeService}
  */
 @injectable()
-export class EmployeeServiceImpl implements EmployeeService {
+export class EmployeeService implements IEmployeeService {
 
     /**
      * Using inversify bindings sets the repository implementation
@@ -128,69 +141,75 @@ export class EmployeeServiceImpl implements EmployeeService {
      * @returns {(Promise<Employee|Error>)}
      * @memberof EmployeeServiceImpl
      */
-    public async  createEmployee(employeeData: Employee): Promise<EmployeeDTO | Error> {
-        const employeeDTO: EmployeeDTO = this.toEmployeeDTO(employeeData);
-
-        const createdDTO: EmployeeDTO = await this._employeeRepository.createEmployee(employeeDTO);
-
-
+    public async  createEmployee(employeeData: IEmployee): Promise<IEmployee | Error> {
+        const createdDTO: IEmployee = await this._employeeRepository.createEmployee(employeeData);
         return createdDTO;
     }
 
-    public async getEmployees(): Promise<Employee[]> {
-        const employee: Employee[] = await this._employeeRepository.findAll().then((a) => a.map((dto: EmployeeDTO) => {
-            return this.toEmployee(dto);
-        }));
-
-        return employee;
+    public async getEmployees(): Promise<IEmployee[]> {
+        const employees = await this._employeeRepository.findAll();
+        return employees;
     }
 
     public deleteEmployee(empId: number): Bluebird<number> {
         return this._employeeRepository.deleteEmployee(empId);
+    }
+}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class EmployeeDatabase extends Core {
+    public model = new Model<IEmployee, EmployeeMongoSchema>(this, EmployeeMongoSchema);
+
+}
+
+const employeesMongoDatabase = new EmployeeDatabase(CONFIG.mongo());
+
+/**
+ * Iridium implementation on Employee API
+ * @export
+ * @class EmployeeRepositoryMongo
+ * @implements {EmployeeRepository}
+ */
+
+@injectable()
+export class EmployeeRepositoryMongo implements EmployeeRepository {
+
+
+    public async findAll() {
+        const employees = await employeesMongoDatabase.connect().then(() => employeesMongoDatabase.model.find());
+        return employees.toArray();
     }
 
     /**
-     * Converts employee DTO to model
-     * @private
-     * @param {EmployeeDTO} employeeDTO
-     * @returns {Employee}
-     * @memberof EmployeeServiceImpl
+     * Create new mongo document for Employee
+     * @param {EmployeeDTO} employeeData
+     * @returns {Promise<EmployeeDTO>}
+     * @memberof EmployeeRepositoryMongo
      */
-    private toEmployee(employeeDTO: EmployeeDTO): Employee {
-        return new Employee(
-            employeeDTO.entitity,
-            employeeDTO.empId,
-            employeeDTO.clientId,
-            employeeDTO.empName,
-            employeeDTO.dept,
-            employeeDTO.team,
-            employeeDTO.manager,
-            employeeDTO.capital,
-            employeeDTO._id
-        );
+    public createEmployee(employeeData: IEmployee) {
+        return employeesMongoDatabase
+            .connect()
+            .then(() => employeesMongoDatabase.model.insert(employeeData));
+
     }
 
-
-    /**
-     * Converts employee model to DTO
-     * @private
-     * @param {Employee} employee
-     * @returns {EmployeeDTO}
-     * @memberof EmployeeServiceImpl
-     */
-    private toEmployeeDTO(employee: Employee): EmployeeDTO {
-        return {
-            entitity: employee.getEntitity,
-            empId: employee.GetEmpId,
-            clientId: employee.GetClient_id,
-            empName: employee.GetEmpName,
-            dept: employee.GetDept,
-            team: employee.GetTeam,
-            manager: employee.GetManager,
-            capital: employee.GetCapital,
-            _id: employee.getId,
-
-        };
+    public deleteEmployee(id: string | number) {
+        return employeesMongoDatabase
+            .connect()
+            .then(() => employeesMongoDatabase.model.remove({ _id: id }));
     }
+
 }

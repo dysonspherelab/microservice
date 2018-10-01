@@ -1,6 +1,7 @@
 const TYPES = {
     EmployeeRepository: Symbol("EmployeeRepository"),
-    EmployeeService: Symbol("EmployeeService")
+    IEmployeeService: Symbol("IEmployeeService"),
+    EmployeeDO: Symbol("EmployeeDO")
 };
 
 export default TYPES;
