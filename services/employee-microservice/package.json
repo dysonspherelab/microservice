@@ -4,7 +4,7 @@
   "description": "",
   "main": "rpc_client.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf build && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,13 +12,14 @@
   "dependencies": {
     "@types/amqplib": "^0.5.8",
     "@types/bluebird": "^3.5.24",
+    "@types/mongoose": "^5.2.17",
     "@types/node": "^10.11.0",
     "amqp-as-promised": "^5.0.1",
     "amqplib": "^0.5.2",
     "bluebird": "^3.5.2",
     "dsn-parser": "^1.0.1",
     "inversify": "^4.13.0",
-    "iridium": "^7.2.5",
+    "mongoose": "^5.3.1",
     "protobufjs": "^6.8.8",
     "reflect-metadata": "^0.1.12"
   }

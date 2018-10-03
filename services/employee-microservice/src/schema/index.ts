@@ -1,36 +1,26 @@
-import { Instance, Collection, Property, ObjectID } from "iridium";
-import { IEmployee } from "../interfaces";
-
+// import { IEmployee } from "../interfaces";
+import mongoose =  require("mongoose");
 /**
- * Iridium config
+ * Mongoose schema
  */
 
-@Collection("Employee")
-export class EmployeeMongoSchema extends Instance<IEmployee, EmployeeMongoSchema> implements IEmployee {
-    @ObjectID
-    public _id!: string;
+const employeeSchema = new mongoose.Schema({
+    entitity: String,
+    empId: String,
+    clientId: String,
+    empname: String,
+    dept: String,
+    team: String,
+    manager: String,
+    capital: String,
+});
 
-    @Property(String, false)
-    public entitity!: string;
 
-    @Property(String, false)
-    public empId!: string;
-
-    @Property(String, false)
-    public clientId!: string;
-
-    @Property(String, false)
-    public empName!: string;
-
-    @Property(String, false)
-    public dept!: string;
-
-    @Property(String, false)
-    public team!: string;
-
-    @Property(String, false)
-    public manager!: string;
-
-    @Property(String, false)
-    public capital!: string;
+export class EmployeeDatabase {
+    private _config: string;
+    constructor(config: string) {
+        this._config = config;
+        mongoose.connect(this._config);
+    }
+    public model = mongoose.model("Employee", employeeSchema);
 }

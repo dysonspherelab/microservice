@@ -7,7 +7,6 @@ import * as Bluebird from "bluebird";
  * @interface EmployeeDTO
  */
 export interface IEmployee {
-    _id?: string | number;
     entitity?: string;
     empId?: string;
     clientId?: string;
@@ -19,8 +18,8 @@ export interface IEmployee {
 }
 
 export interface EmployeeDO {
-    getEmployee(): IEmployee;
-    addEmployee(): Promise<IEmployee | Error>;
+    getEmployee(id: string): Promise<IEmployee>;
+    addEmployee(employeeData: IEmployee): Promise<IEmployee | Error>;
     listEmployees(): Promise<IEmployee[]>;
     removeEmployee(id: string | number): Bluebird<number>;
 }
@@ -31,7 +30,7 @@ export interface EmployeeDO {
  * @interface EmployeeService
  */
 export interface IEmployeeService {
-    getEmployees(): Promise<IEmployee[]>;
+    getEmployees(id?: string): Promise<IEmployee[]>;
     createEmployee(employeeData: IEmployee): Promise<IEmployee | Error>;
     deleteEmployee(id: string | number): Bluebird<number>;
 }
@@ -45,7 +44,7 @@ export interface IEmployeeService {
  */
 
 export interface EmployeeRepository {
-    findAll(): any;
+    findAll(cond?: object): any;
     createEmployee(employeeData: IEmployee): any;
     deleteEmployee(id: string | number): any;
 }
