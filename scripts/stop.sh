@@ -2,17 +2,13 @@
 
 # stop all the needed microservices
 
-SERVICES_DIR="services"
+SERVICES_DIR="."
 
-EMPLOYEE_MICROSERVICE="./${SERVICES_DIR}/employee-microservice"
-FIXTURE_MICROSERVICE="./${SERVICES_DIR}/fixture-microservice"
-GROUPS_TEAMS_MICROSERVICE="./${SERVICES_DIR}/groups-teams-microservice"
+API_GATEWAY="${SERVICES_DIR}/api-gateway"
+MICROSERVICE="${SERVICES_DIR}/microservice"
 
-kill $(cat ${EMPLOYEE_MICROSERVICE}/.pid)
-rm ${EMPLOYEE_MICROSERVICE}/.pid
+kill $(cat ${MICROSERVICE}/.pid)
+rm ${MICROSERVICE}/.pid
 
-kill $(cat ${FIXTURE_MICROSERVICE}/.pid)
-rm ${FIXTURE_MICROSERVICE}/.pid
-
-kill $(cat ${GROUPS_TEAMS_MICROSERVICE}/.pid)
-rm ${GROUPS_TEAMS_MICROSERVICE}/.pid
+kill $(cat ${API_GATEWAY}/.pid)
+rm ${API_GATEWAY}/.pid

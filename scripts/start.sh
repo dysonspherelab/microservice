@@ -2,41 +2,32 @@
 
 # start all the needed microservices
 
-SERVICES_DIR="services"
+SERVICES_DIR="."
 
-EMPLOYEE_MICROSERVICE="./${SERVICES_DIR}/employee-microservice"
-FIXTURE_MICROSERVICE="./${SERVICES_DIR}/fixture-microservice"
-GROUPS_TEAMS_MICROSERVICE="./${SERVICES_DIR}/groups-teams-microservice"
+API_GATEWAY="${SERVICES_DIR}/api-gateway"
+MICROSERVICE="${SERVICES_DIR}/microservice"
 
 install_deps()
 {   
 
-    if [ ! -d "${EMPLOYEE_MICROSERVICE}/node_modules" ]; then
-        cd "${EMPLOYEE_MICROSERVICE}" && npm install ; cd -
+    if [ ! -d "${API_GATEWAY}/node_modules" ]; then
+        cd "${API_GATEWAY}" && npm install ; cd -
     fi
 
-    if [ ! -d "${FIXTURE_MICROSERVICE}/node_modules" ]; then
-        cd "${FIXTURE_MICROSERVICE}" && npm install ; cd -
-    fi
-
-    if [ ! -d "${GROUPS_TEAMS_MICROSERVICE}/node_modules" ]; then
-        cd "${GROUPS_TEAMS_MICROSERVICE}" && npm install ; cd -
+    if [ ! -d "${MICROSERVICE}/node_modules" ]; then
+        cd "${MICROSERVICE}" && npm install ; cd -
     fi
 }
 
 start()
 {
-    node "${EMPLOYEE_MICROSERVICE}/bin/www" &
+    node "${API_GATEWAY}/bin/www" &> out.log &
     sleep 1
-    echo $! > "${EMPLOYEE_MICROSERVICE}/.pid"
+    echo $! > "${API_GATEWAY}/.pid"
 
-    node "${FIXTURE_MICROSERVICE}/bin/www" &
+    node "${MICROSERVICE}/build/server.js" &> out.log &
     sleep 1
-    echo $! > "${FIXTURE_MICROSERVICE}/.pid" 
-    
-    node "${GROUPS_TEAMS_MICROSERVICE}/bin/www" &
-    sleep 1
-    echo $! > "${GROUPS_TEAMS_MICROSERVICE}/.pid"
+    echo $! > "${MICROSERVICE}/.pid"
 }
 
 

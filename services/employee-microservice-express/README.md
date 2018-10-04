@@ -1,2 +1,0 @@
-# Teamono API
-

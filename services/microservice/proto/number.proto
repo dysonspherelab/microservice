@@ -1,7 +1,0 @@
-package Numpackage;
-
-syntax = "proto3";
- 
-message NumMessage {
-    string number = 1;
-}

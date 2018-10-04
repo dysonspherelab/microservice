@@ -51,8 +51,8 @@ function onError(error) {
   }
 
   const bind = typeof port === "string"
-    ? "Pipe " + port
-    : "Port " + port;
+    ? "Pipe"
+    : "Port";
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -65,6 +65,7 @@ function onError(error) {
       process.exit(1);
       break;
     default:
+      process.exit(1)
       throw error;
   }
 }
